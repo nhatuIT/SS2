@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Shop;
+use App\Rules\ExactlyOneUpperCase;
+
 class ShopController extends Controller
 {
     public function index()
@@ -24,6 +26,10 @@ class ShopController extends Controller
      */
     public function store(Request $request)
     {
+        $request-> validate([
+            'name'=> 'required',
+            'address'=> ['required', 'min:6', new ExactlyOneUpperCase]
+        ]);
         Shop::create($request->input());
         // return 
         return redirect()->action('ShopController@index');

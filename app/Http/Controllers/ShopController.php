@@ -10,8 +10,12 @@ class ShopController extends Controller
 {
     public function index()
     {
+        // dd('1');
         $shops = Shop::all();
         
+        // if (request()->expectsJson()) {
+        //     return response()->json(['shops' => $shops, 'number' => $shops->count()]);
+        // }
         return view('shops.index', compact('shops')); 
     }
 
@@ -42,6 +46,10 @@ class ShopController extends Controller
 
     public function update(Request $request, Shop $shop)
     {
+        $request-> validate([
+            'name'=> 'required',
+            'address'=> ['required', 'min:6', new ExactlyOneUpperCase]
+        ]);
         $shop->update($request->input());
         return redirect()->action('ShopController@index');
     }

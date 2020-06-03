@@ -17,4 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('shops','ShopController');
+Route::group(['middleware' => 'admin'], function() {
+    Route::resource('shops','ShopController');
+    Route::get('/home', 'HomeController@index')->name('home');
+});
+
+Auth::routes();
+
